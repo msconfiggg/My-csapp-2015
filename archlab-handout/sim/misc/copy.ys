@@ -1,0 +1,51 @@
+# Execution begins at address 0
+        .pos 0
+        irmovq stack, %rsp      # Set up stack pointer
+        call main               # Execute main program
+        halt                    # Terminate program
+
+# Sample
+        .align 8
+# Source block
+src:
+        .quad 0x00a
+        .quad 0x0b0
+        .quad 0xc00
+
+# Destination block
+dest:
+        .quad 0x111
+        .quad 0x222
+        .quad 0x333
+
+main:
+        irmovq src, %rdi        # src
+        irmovq dest, %rsi       # dest
+        irmovq $3, %rdx         # len
+        call copy_block
+        ret
+
+# long copy_block(long *src, long *dest, long len)
+# src in %rdi, # dest in %rsi, # len in %rdx
+copy_block:
+        irmovq $0, %rax         # result
+        irmovq $8, %r8          # y86 only accept calculation between registers
+        irmovq $1, %r9
+        andq %rdx, %rdx
+        jmp test
+
+loop:
+        mrmovq (%rdi), %rcx     # temp = *src
+        rmmovq %rcx, (%rsi)     # *dest = temp
+        addq %r8, %rdi          # src++
+        addq %r8, %rsi          # dest++
+        xorq %rcx, %rax         # result ^= temp
+        subq %r9, %rdx          # len--
+
+test:
+        jne loop
+        ret
+
+# Stack starts here and grows to lower addresses
+        .pos 0x200
+stack:
